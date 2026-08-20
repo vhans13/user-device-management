@@ -1,0 +1,17 @@
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Maven
+target/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Env files
+.env
+*.env.local
+
+# Personal notes (not part of deliverable)
+NOTES.md

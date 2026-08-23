@@ -124,7 +124,11 @@ public class PhoneNumberService {
     }
 
     public void deleteAllForUser(UUID userId) {
-        phoneNumberRepository.findByUserId(userId).forEach(phone -> {
+        List<PhoneNumber> phones = phoneNumberRepository.findByUserId(userId);
+        phoneNumberRepository.deleteAll(phones);
+        phoneNumberRepository.flush();
+
+        phones.forEach(phone -> {
             PhoneNumberEvent event = PhoneNumberEvent.of(
                     PhoneNumberEvent.PhoneNumberEventType.PHONE_NUMBER_REMOVED,
                     userId,
@@ -132,9 +136,7 @@ public class PhoneNumberService {
                     new PhoneNumberPayload(phone.getNumber(), phone.getLabel())
             );
             eventPublisher.publishPhoneNumberEvent(event);
-            phoneNumberRepository.delete(phone);
         });
-        phoneNumberRepository.flush();
     }
 
     private PhoneNumber findPhoneNumberOrThrow(UUID userId, UUID phoneNumberId) {

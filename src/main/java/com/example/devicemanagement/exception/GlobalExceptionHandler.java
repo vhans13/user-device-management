@@ -43,6 +43,13 @@ public class GlobalExceptionHandler {
         return problem;
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ProblemDetail handleIllegalArgument(IllegalArgumentException ex) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
+        problem.setTitle("Invalid Parameter");
+        return problem;
+    }
+
     @ExceptionHandler(ObjectOptimisticLockingFailureException.class)
     public ProblemDetail handleOptimisticLock(ObjectOptimisticLockingFailureException ex) {
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(

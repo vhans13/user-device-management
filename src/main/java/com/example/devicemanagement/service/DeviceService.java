@@ -103,7 +103,11 @@ public class DeviceService {
     }
 
     public void deleteAllForUser(UUID userId) {
-        deviceRepository.findByUserId(userId).forEach(device -> {
+        List<Device> devices = deviceRepository.findByUserId(userId);
+        deviceRepository.deleteAll(devices);
+        deviceRepository.flush();
+
+        devices.forEach(device -> {
             DeviceEvent event = DeviceEvent.of(
                     DeviceEvent.DeviceEventType.DEVICE_REMOVED,
                     userId,
@@ -111,9 +115,7 @@ public class DeviceService {
                     new DevicePayload(device.getDeviceName(), device.getDeviceModel())
             );
             eventPublisher.publishDeviceEvent(event);
-            deviceRepository.delete(device);
         });
-        deviceRepository.flush();
     }
 
     private Device findDeviceOrThrow(UUID userId, UUID deviceId) {

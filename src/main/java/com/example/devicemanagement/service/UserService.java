@@ -103,13 +103,13 @@ public class UserService {
     public void setPreferredPhoneNumberId(UUID userId, UUID phoneNumberId) {
         User user = findUserOrThrow(userId);
         user.setPreferredPhoneNumberId(phoneNumberId);
-        userRepository.save(user);
+        userRepository.saveAndFlush(user);
     }
 
     public void clearPreferredPhoneNumberId(UUID userId) {
         User user = findUserOrThrow(userId);
         user.setPreferredPhoneNumberId(null);
-        userRepository.save(user);
+        userRepository.saveAndFlush(user);
     }
 
     private PhoneNumberResponse resolvePreferredPhone(User user) {
